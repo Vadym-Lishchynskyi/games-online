@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+    <title>Our games</title>
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <link rel="stylesheet" type="text/css" href="css/component.css" />
+    <script src="js/modernizr.custom.js"></script>
+    <!--from game 2-->
+    <link rel="stylesheet" href="fontawesome/css/fontawesome-all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--my styles-->
+    <link rel="stylesheet" href="my_styles.css">
+</head>
+<body>
+<div class="md-modal md-effect-16" id="modal-16">
+    <div class="md-content">
+        <h3>Characteristics of your game</h3>
+        <div>
+            <ul>
+                <li><strong>Your squere:</strong>
+                    <div class="ch_pole">
+                        <button class="pole" data-modal="modal-16" val="3" >3x3</button>
+                        <button class="pole" data-modal="modal-16" val="4" >4x4</button>
+                        <button class="pole" data-modal="modal-16" val="5" >5x5</button>
+                        <button class="pole" data-modal="modal-16" val="6" >6x6</button>
+                        <button class="pole" data-modal="modal-16" val="7" >7x7</button>
+                        <button class="pole" data-modal="modal-16" val="8" >8x8</button>
+                        <button class="pole" data-modal="modal-16" val="9" >9x9</button>
+                    </div>
+                </li>
+                <li><strong>In a line:</strong>
+                    <div class="in_line">
+                        <button class="inl" data-modal="modal-16" val_inl="3" >3</button>
+                        <button class="inl" data-modal="modal-16" val_inl="4" >4</button>
+                        <button class="inl" data-modal="modal-16" val_inl="5" >5</button>
+                        <button class="inl" data-modal="modal-16" val_inl="6" >6</button>
+                    </div>
+                </li>
+                <li><strong>Player 1:</strong>
+                    <div class="p2">
+                        <p class="ch">Choose the first mark:</p><div class="dx"> <i class="fas in_m fa-times fa-6x"></i></div><p class="ch">or</p><div class="do"> <i class="far fa-circle in_m fa-6x"></i></div>
+                    </div>
+                </li>
+            </ul>
+            <button class=" button md-close">Play!</button>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <!-- Top Navigation -->
+    <!--<div class="codrops-top clearfix">-->
+    <!--<a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/DynamicGrid/"><span>Previous Demo</span></a>-->
+    <!--<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=15313"><span>Back to the Codrops Article</span></a></span>-->
+    <!--</div>-->
+    <header>
+        <h1>Our games <span>The most popular games in the Internet!</span></h1>
+    </header>
+    <div class="main clearfix">
+        <div class="column">
+            <button class="md-trigger" data-modal="modal-16">Tic tac toe</button>
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div class="column">
+            <button class="" data-modal="modal-16">other games</button>
+        </div>
+    </div>
+</div><!-- /container -->
+<div class="main_game"></div>
+<div class="hjv">
+    <div class="d"><div class="winer">Winer :</div><div class="win"></div></div>
+    <div class="then">
+        <div class="then1">
+            <button class="" data-modal="modal-16">Other game</button>
+        </div>
+        <div class="then2">
+            <button class="md-trigger" data-modal="modal-16">Again</button>
+        </div>
+    </div>
+</div>
+<div class="md-overlay"></div><!-- the overlay element -->
+
+<!-- classie.js by @desandro: https://github.com/desandro/classie -->
+<script src="js/classie.js"></script>
+<script src="js/modalEffects.js"></script>
+
+<!-- for the blur effect -->
+<!-- by @derSchepp https://github.com/Schepp/CSS-Filters-Polyfill -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = '/js/';
+    //my script
+    $(function() {
+        $('.pole').click(function () {
+            $(this).css('border','1px solid #ffffff')
+        });
+        var chacked;
+        var line_num;
+        var in_line;
+        var clicked_num;
+        var array = [];
+        var x;
+        var y;
+        var S;
+        var radimassiva =6;
+        var s_cl = 0;
+        $('.dx').click(function () {
+            chacked = true;
+            $(this).css('border','1px solid #fff').css('border-radius','10px');
+            $('.do').css('border','0px');
+        });
+        $('.do').click(function () {
+            chacked = false;
+            $(this).css('border','1px solid #fff').css('border-radius','10px');
+            $('.dx').css('border','0px');
+        });
+        $('.pole').click(function () {
+            line_num = $(this).attr('val');
+            console.log(line_num);
+            $(this).addClass('po_checked');
+            for (var i = 0;i<line_num;i++){//создание двумерного массива    когда к i прибавляется 1?
+                array[i] = new Array(Number(line_num)).fill(0);//по идее додаем в каждую ячейку внутриннего мпссива пустоту            что с областью видимости???как сделать правильно
+            };
+            console.log(array);
+        });
+        $('.inl').click(function () {
+            in_line = $(this).attr('val_inl');
+            $(this).css('border','1px solid white');
+            console.log(in_line);
+        });
+        click();
+        function poisk_pos() {
+            if(Number.isInteger(clicked_num/line_num) === true){//проверка целое ли число выходит при делении
+                y = (clicked_num/line_num)-1;//номер ряда
+                x = line_num-1;// номер столба
+            }
+            else{
+                y = Math.trunc(clicked_num/line_num);//узнаем целое число от деления и
+                x = (clicked_num%line_num)-1;//остаток от деления например 15/7 = 1
+            };
+            //console.log(y,x);
+            //array[y][x] = chacked;
+            //console.log(array[y][x]);
+        };
+        function click() {
+            $('.button').click(function () {
+                if(in_line>line_num){
+                    alert('Your choose is not real!');
+                }
+                else if(in_line<=line_num) {
+                    if (line_num >= 3 && line_num <= 10) {
+                        $('.main').css('display', 'none');
+                        $('header').css('display', 'none');
+                        $('body').addClass('bod');
+                        $('.main_game').css('display', 'grid');
+                        $('.main_game').addClass('m' + line_num);
+                        for (var i = 0; i < line_num * line_num+1; i++) {
+                            $('.main_game').html(function () {// мы додаем блок а не заминяем его
+                                $(this).html($(this).html() + '<div class="click"></div>');
+                            });
+                            $('.click:nth-child(' + i + ')').attr('value', i);//додаем к определенному блоку значение номер блока
+                            console.log(
+                                $('.click').attr('value')
+                            );
+                            $('.click').click(function () {
+                                clicked_num = $(this).attr('value');
+                                poisk_pos();
+                                console.log(y);
+                                console.log(x);
+                                console.log(array[y][x]);
+                                if(array[y][x]===0){
+                                    console.log(chacked);
+                                    if (chacked === true) {//true = x =1
+                                        if (line_num >= 8) {
+                                            $(this).html('<i class="fas in_m fa-times fa-3x"></i>');
+                                        }
+                                        else if (line_num >= 6) {
+                                            $(this).html('<i class="fas in_m fa-times fa-5x"></i>');
+                                        }
+                                        else if (line_num >= 4) {
+                                            $(this).html('<i class="fas in_m fa-times fa-7x"></i>');
+                                        }
+                                        else {
+                                            $(this).html('<i class="fas in_m fa-times fa-9x"></i>');
+                                        }
+                                        clicked_num = $(this).attr('value');
+                                        //console.log(clicked_num);
+                                        poisk_pos();
+                                        array[y][x] = chacked;
+                                        s1();
+                                        chacked = false;//не работает изза облати видимости переменной
+                                    }
+                                    else if (chacked === false) {//false = o
+                                        if (line_num >= 8) {
+                                            $(this).html('<i class="far fa-circle in_m fa-3x"></i>');
+                                        }
+                                        else if (line_num >= 6) {
+                                            $(this).html('<i class="far fa-circle in_m fa-5x"></i>');
+                                        }
+                                        else if (line_num >= 4) {
+                                            $(this).html('<i class="far fa-circle in_m fa-7x"></i>');
+                                        }
+                                        else {
+                                            $(this).html('<i class="far fa-circle in_m fa-9x"></i>');
+                                        }
+                                        clicked_num = $(this).attr('value');
+                                        //console.log(clicked_num);
+                                        poisk_pos();
+                                        array[y][x] = chacked;
+                                        s1();
+                                        chacked = true;//не работает изза облати видимости переменной
+                                    };
+                                }
+                                else{
+                                    console.log('this position is chacked!');
+                                };
+                            });
+                        };
+                    }
+                    else {
+                        alert("You didn't choose your square!");
+                    };
+                }
+                else{
+                    alert("You didn't choose how many characters you need to win!");
+                };
+            });
+        };
+        function s1() {
+            S = 1;
+            for(var i = x+1; S<in_line; i++){//i:=a но j:=b я не присвоїв лишнее. знак = или >?//                          исправления  i = x+1
+                if (array[y][i] === chacked) {                                                   //хрестик или нолик
+                    S = S + 1;
+                    console.log(S +'s s1');
+                    if(S==in_line){
+                        console.log(chacked + ' win s1');
+                        alert(chacked + ' win s1');
+                        result()
+                    }
+                    else{
+                        click();
+                    };
+                }
+                else {
+                    console.log('NE sovpadaet s chacked s1');
+                    s2();
+                    break;
+                };
+            };
+        };
+
+        function s2() {
+            for (var i = x - 1; S < in_line; i--) {
+                if (array[y][i] === chacked) {
+                    S = S + 1;
+                    console.log(S +'s s2');
+                    if(S==in_line){
+                        console.log(chacked + ' win s2');
+                        alert(chacked + ' win s2');
+                        result()
+                    }
+                    else{
+                        click();
+                    };
+                }
+                else {
+                    console.log('NE sovpadaet s chacked s2');
+                    s3();
+                    break;
+                };
+            };
+        };
+        function s3() {
+            S = 1;
+            console.log('its work');
+            for (var i = y + 1; S < in_line; i++) {
+                console.log(i);
+//                if (i >= 0 && i < array.length) {
+                    if (array[i][x] === chacked) {// array[i] is undefined
+                        S = S + 1;
+                        console.log(S +'s s3');
+                        if(S==in_line){
+                            console.log(chacked + ' win s3');
+                            alert(chacked + ' win s3');
+                            result()
+                        }
+                        else{
+                            click();
+                        };
+                    }
+                    else {
+                        console.log('NE sovpadaet s chacked s3');
+                        s4();
+                        break;
+                    };
+//                }
+//                else {
+//                    console.log('NE v massive s3');
+//                    s4();
+//                    break;
+//                };
+            };
+        };
+        function s4() {
+            for (var i = y - 1; S < in_line; i--) {
+                if (i >= 0 && i < array.length) {
+                    if (array[i][x] === chacked) {
+                        S = S + 1;
+                        console.log(S +'s s4');
+                        if(S==in_line){
+                            console.log(chacked + ' win s4');
+                            alert(chacked + ' win s4');
+                            result()
+                        }
+                        else{
+                            click();
+                        };
+                    }
+                    else {
+                        console.log('NE sovpadaet s chacked s4');
+                        s5();
+                        break;
+                    };
+                }
+                else {
+                    console.log('NE v massive s4');
+                    s5();
+                    break;
+                };
+            };
+        };
+        function s5() {
+            S = 1;
+            for (var i = x + 1, j = y + 1; S < in_line; i++, j++) {
+                if (j >= 0 && j < array.length) {//quastions!!!array[?]
+                    if (array[j][i] === chacked) {
+                        S = S +1;
+                        console.log(S +'s s5');
+                        if(S==in_line){
+                            console.log(chacked + ' win s5');
+                            alert(chacked + ' win s5');
+                            result()
+                        }
+                        else{
+                            click();
+                        };
+                    }
+                    else {
+                        console.log('NE sovpadaet s chacked s5');
+                        s6();
+                        break;
+                    };
+                }
+                else {
+                    console.log('NE v massive y s5');
+                    s6();
+                    break;
+                };
+            };
+        };
+        function s6() {
+            for (var i = x - 1, j = y - 1; S < in_line; i--, j--) {
+                if (j >= 0 && j < array.length) {
+                    if (array[j][i] === chacked) {
+                        S = S +1;
+                        console.log(S +'s s6');
+                        if(S==in_line){
+                            console.log(chacked + ' win s6');
+                            alert(chacked + ' win s6');
+                            result()
+                        }
+                        else{
+                            click();
+                        };
+                    }
+                    else {
+                        console.log('NE sovpadaet s chacked s6');
+                        s7();
+                        break;
+                    };
+                }
+                else {
+                    console.log('NE v massive y s6');
+                    s7();
+                    break;
+                };
+            };
+        };
+        function s7() {
+            S = 1;
+            for (var i = x + 1, j = y - 1; S < in_line; i++, j--) {
+                if (j >= 0 && j < array.length) {
+                    if (array[j][i] === chacked) {
+                        S = S +1;
+                        console.log(S +'s s7');
+                        if(S==in_line){
+                            console.log(chacked + ' win s7');
+                            alert(chacked + ' win s7');
+                            result()
+                        }
+                        else{
+                            click();
+                        };
+                    }
+                    else {
+                        console.log('NE sovpadaet s chacked s7');
+                        s8();
+                        break;
+                    };
+                }
+                else {
+                    console.log('NE v massive y s7 ');
+                    s8();
+                    break;
+                };
+            };
+        };
+        function s8() {
+            for (var i = x - 1, j = y + 1; S < in_line; i--, j++) {
+                if (j >= 0 && j < array.length) {
+                    if (array[j][i] === chacked) {
+                        S = S +1;
+                        console.log(S +'s s8');
+                        if(S==in_line){
+                            console.log(chacked + ' win s8');
+                            alert(chacked + ' win s8');
+                            result()
+                        }
+                        else{
+                            click();
+                        };
+                    }
+                    else {
+                        console.log('Write more ne sovpadaet c chacked s8_______');
+                        click();
+                        break;
+                    };
+                }
+                else {
+                    console.log('Write more ne v massive y s8________');
+                    click();
+                    break;
+                };
+            };
+            s_cl = s_cl+1;
+            if(s_cl == line_num*line_num){
+//                        result();
+                alert('Pole zapovnene!');
+            }
+            else{
+                click();
+            };
+        };
+
+
+        function result() {
+            $('.md-overlay').addClass('.show');
+            $('.hjv').addClass('.stili').addClass('.stilii').css('display','block').addClass('md-show');
+            if(chacked===true){
+                $('.win').html('<i class="fas in_m fa-times fa-3x"></i>');
+            }
+            else {
+                $('.win').html('<i class="far fa-circle in_m fa-3x"></i>');
+            }
+            $('.md-overlay').addClass('md-show').addClass('md-effect-16').css('display','block');
+            $('button').click(function () {
+                $('.hjv').css('display','none');
+            });
+        };
+    });
+</script>
+<script src="js/cssParser.js"></script>
+<script src="js/css-filters-polyfill.js"></script>
+</body>
+</html>

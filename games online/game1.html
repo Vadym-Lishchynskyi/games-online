@@ -1,0 +1,79 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <title>Game 1</title>
+        <link rel="stylesheet" href="fontawesome/css/fontawesome-all.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="base.css" />
+        <link rel="stylesheet" type="text/css" href="buttons.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="game1.css">
+    </head>
+    <body>
+    <div class="choose">
+        <div class="Tic">
+            <img src="http://x-lines.ru/letters/i/cyrillicdreamy/0869/5b5be6/52/0/ktwsgenwcft1yidxcw.png">
+        </div>
+        <div class="p2">
+            <p class="ch">Choose the first mark:</p><div class="dx"> <i class="fas in_m fa-times fa-6x"></i></div><p class="ch">or</p><div class="do"> <i class="far fa-circle in_m fa-6x"></i></div>
+        </div>
+        <div class="p1">
+            <button class="button button--moema button--border-thick button--size-s">Play vs friend</button>
+        </div>
+    </div>
+    </div>
+    <div class="main">
+        <div class="click" value="1"></div>
+        <div class="click" value="2"></div>
+        <div class="click" value="3"></div>
+        <div class="click" value="4"></div>
+        <div class="click" value="5"></div>
+        <div class="click" value="6"></div>
+        <div class="click" value="7"></div>
+        <div class="click" value="8"></div>
+        <div class="click" value="9"></div>
+    </div>
+    <script>
+        $(function() {
+            var chacked;
+            var s_first = "";
+            var s_second = "";
+            $('.dx').click(function () {
+                chacked = true;
+                $(this).css('border','1px solid #fff').css('border-radius','10px');
+                $('.do').css('border','0px');
+            });
+            $('.do').click(function () {
+                chacked = false;
+                $(this).css('border','1px solid #fff').css('border-radius','10px');
+                $('.dx').css('border','0px');
+            });
+            $('.button').click(function () {
+                $('.choose').css('display','none');
+                $('.main').css('display','grid');
+            });
+            $('.click').click(function () {
+                if(chacked === true){
+                    $(this).html('<i class="fas in_m fa-times fa-6x"></i>');
+                    s_first = s_first + $(this).attr('value');
+					console.log(s_first);
+                    chacked = false;
+                }
+                else if(chacked === false){
+                    $(this).html('<i class="far fa-circle in_m fa-6x"></i>');
+                    s_second =s_second + $(this).attr('value');
+					console.log(s_second);
+                    chacked = true;
+                }
+            });
+			
+            if(s_first === 123 || s_first === 321 || s_first === 213 || s_first === 312 ||s_first === 231 || s_first === 132){
+                echo('first');
+            }
+            else if(s_second === 123){
+                echo('second');
+            };
+        });
+    </script>
+    </body>
+</html>
